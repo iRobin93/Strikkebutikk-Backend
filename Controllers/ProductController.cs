@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StrikkebutikkBackend.Model;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace StrikkebutikkBackend.Controllers
 {
@@ -10,13 +10,22 @@ namespace StrikkebutikkBackend.Controllers
     public class ProductController : ControllerBase
     {
 
-
         [HttpGet(Name = "GetProduct")]
         public IEnumerable<Product> GetProduct()
         {
-
-            return [new Product { Id = 0, ProductName = "Seven Sisters - genser" },
-                    new Product {Id = 1, ProductName = "Bobbie"}];
+            List<Product> products = new();
+            SqlConnection con = new SqlConnection("Data Source = (localdb)\\local; Initial Catalog = Strikkebutikk; Integrated Security = True");
+            con.Open();
+            SqlCommand cmd = new SqlCommand("Select * from Product", con);
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    products.Add(new Product { Id = (int)reader["Id"], ProductName = reader["ProductName"].ToString() });
+                }
+            }
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return products;
         }
     }
 }
