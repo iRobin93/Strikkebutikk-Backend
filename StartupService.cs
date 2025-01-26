@@ -7,6 +7,8 @@ namespace StrikkebutikkBackend
 
         public StartupService(AppDBContext appDBContext) 
         {
+
+
             Product newProduct = new Product
             {
                 id = 0,

@@ -23,5 +23,17 @@ namespace StrikkebutikkBackend.Controllers
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             return products;
         }
+
+
+        [HttpPost(Name = "PostProduct")]
+        public IActionResult PostProduct(Product product)
+        {
+
+            appDBContext.Products.Add(product);
+            appDBContext.SaveChanges();
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return Ok();
+        }
+
     }
 }

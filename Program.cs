@@ -19,17 +19,17 @@ builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(buil
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<StartupService>();
+//builder.Services.AddScoped<StartupService>();
 
 
 var app = builder.Build();
 app.UseCors("AllowSpecificOrigin");
 app.UseRouting();
-using (var scope = app.Services.CreateScope())
-{
-    var studentService = scope.ServiceProvider.GetRequiredService<StartupService>();
-    // StudentService constructor will automatically handle initialization
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var studentService = scope.ServiceProvider.GetRequiredService<StartupService>();
+//    // StudentService constructor will automatically handle initialization
+//}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
