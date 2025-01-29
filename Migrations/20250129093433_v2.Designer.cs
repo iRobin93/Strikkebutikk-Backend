@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StrikkebutikkBackend;
 
@@ -10,9 +11,11 @@ using StrikkebutikkBackend;
 namespace StrikkebutikkBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250129093433_v2")]
+    partial class v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,24 +39,6 @@ namespace StrikkebutikkBackend.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Assortments");
-                });
-
-            modelBuilder.Entity("StrikkebutikkBackend.Model.Pattern", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("img")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Patterns");
                 });
 
             modelBuilder.Entity("StrikkebutikkBackend.Model.Product", b =>
