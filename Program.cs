@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StrikkebutikkBackend;
-
+using AutoMapper;
+using StrikkebutikkBackend.Model;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(buil
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddAutoMapper(typeof(ProductProfile));
 //builder.Services.AddScoped<StartupService>();
 
 

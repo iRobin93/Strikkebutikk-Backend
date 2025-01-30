@@ -11,7 +11,7 @@
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
         }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductWithForeignKey> Products { get; set; }
         public DbSet<Assortment> Assortments { get; set; }
         public DbSet<Pattern> Patterns { get; set; }
 

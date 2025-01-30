@@ -9,7 +9,7 @@ namespace StrikkebutikkBackend
         {
 
 
-            Product newProduct = new Product
+            ProductWithForeignKey newProduct = new ProductWithForeignKey
             {
                 id = 0,
                 productImg = "source/img/seven-sister-genser.png",
