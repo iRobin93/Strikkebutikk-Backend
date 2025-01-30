@@ -26,6 +26,14 @@
             modelBuilder.Entity<Pattern>()
                 .Property(e => e.id)
                 .ValueGeneratedNever(); // This removes the identity behavior
+
+            // Configure the foreign key relationship for ProductWithForeignKey and Pattern
+            modelBuilder.Entity<ProductWithForeignKey>()
+                .HasOne(p => p.pattern) // Define the relationship with Pattern
+                .WithMany() // If Pattern has no collection property, use WithMany()
+                .HasForeignKey(p => p.patternId) // Define the foreign key
+                .OnDelete(DeleteBehavior.Restrict);  // Remove cascading delete
+
         }
 
 

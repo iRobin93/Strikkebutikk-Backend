@@ -6,9 +6,9 @@ namespace StrikkebutikkBackend.Model
     {
         public int id { get; set; }
         public string productImg { get; set; }
-        public string productAlbumJSON { get; set; }
+        public string[] productAlbum { get; set; }
         public string productName { get; set; }
-        public string sizesJSON { get; set; }
+        public string[] sizes { get; set; }
         public string category { get; set; }
 
         public int patternId { get; set; }

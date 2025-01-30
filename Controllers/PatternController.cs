@@ -43,8 +43,18 @@ namespace StrikkebutikkBackend.Controllers
                 // 2. If the entity is not found, return a 404 Not Found
                 return NotFound(new { message = "Pattern not found" });
             }
-            appDBContext.Patterns.Remove(pattern);
-            appDBContext.SaveChanges();
+
+            try
+            {
+                appDBContext.Patterns.Remove(pattern);
+                appDBContext.SaveChanges();
+            }
+            catch (Exception error)
+            {
+                return Conflict(new {message = "Foreign key conflict"});
+            }
+
+
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             return Ok();
         }

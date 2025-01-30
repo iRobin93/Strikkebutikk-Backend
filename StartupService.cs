@@ -14,13 +14,13 @@ namespace StrikkebutikkBackend
                 id = 0,
                 productImg = "source/img/seven-sister-genser.png",
                 // Serialize the productAlbum and sizes to JSON strings
-                productAlbumJSON = JsonConvert.SerializeObject(new string[] {
+                productAlbum = new string[] {
                 "source/img/seven-sisters1.png",
                 "source/img/seven-sisters2.png",
                 "source/img/seven-sisters3.png"
-            }),
+            },
                 productName = "Seven Sisters - genser",
-                sizesJSON = JsonConvert.SerializeObject(new string[] { "s", "m", "l" }),
+                sizes = new string[] { "s", "m", "l" },
                 category = "genser",
                 patternId = 0,
                 quantity = 2,
