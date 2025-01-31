@@ -45,5 +45,21 @@ namespace StrikkebutikkBackend.Controllers
             return Ok();
         }
 
+
+        [HttpDelete(Name = "DeleteProduct")]
+        public IActionResult DeleteProduct(int id)
+        {
+            var product = appDBContext.Products.Find(id);
+            if (product == null)
+            {
+                // 2. If the entity is not found, return a 404 Not Found
+                return NotFound(new { message = "Product not found" });
+            }
+            appDBContext.Products.Remove(product);
+            appDBContext.SaveChanges();
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return Ok();
+        }
+
     }
 }
