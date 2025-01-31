@@ -12,7 +12,7 @@ namespace StrikkebutikkBackend
             ProductWithForeignKey newProduct = new ProductWithForeignKey
             {
                 id = 0,
-                productImg = "source/img/seven-sister-genser.png",
+                productImg = null,
                 // Serialize the productAlbum and sizes to JSON strings
                 productAlbum = new string[] {
                 "source/img/seven-sisters1.png",
@@ -21,6 +21,7 @@ namespace StrikkebutikkBackend
             },
                 productName = "Seven Sisters - genser",
                 sizes = new string[] { "s", "m", "l" },
+                colorAltIds = new int[] {3,5},
                 category = "genser",
                 patternId = 0,
                 quantity = 2,

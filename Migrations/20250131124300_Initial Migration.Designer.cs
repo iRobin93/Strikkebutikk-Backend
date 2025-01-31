@@ -11,8 +11,8 @@ using StrikkebutikkBackend;
 namespace StrikkebutikkBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250130193459_v6")]
-    partial class v6
+    [Migration("20250131124300_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,10 @@ namespace StrikkebutikkBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.PrimitiveCollection<string>("colorAltIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("patternId")
                         .HasColumnType("int");
 
@@ -84,9 +88,9 @@ namespace StrikkebutikkBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("productImg")
+                    b.Property<byte[]>("productImg")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("productInfo")
                         .IsRequired()
