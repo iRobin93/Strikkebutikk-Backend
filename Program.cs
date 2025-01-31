@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using StrikkebutikkBackend;
 using AutoMapper;
 using StrikkebutikkBackend.Model;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,7 +20,25 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+
+//builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Product API", Version = "v1" });
+
+    // Include XML comments in Swagger documentation (if your project uses them)
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+
+    // Register the custom schema filter
+    c.SchemaFilter<MultipartFormDataSchemaFilter>();
+});
+
+
 builder.Services.AddAutoMapper(typeof(ProductProfile));
 //builder.Services.AddScoped<StartupService>();
 
@@ -35,7 +55,11 @@ app.UseRouting();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Product API V1");
+    });
 }
 
 app.UseHttpsRedirection();

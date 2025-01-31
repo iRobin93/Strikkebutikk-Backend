@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StrikkebutikkBackend.Model;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace StrikkebutikkBackend.Controllers
 {
@@ -20,30 +22,82 @@ namespace StrikkebutikkBackend.Controllers
         }
 
         [HttpGet(Name = "GetProduct")]
-        public IEnumerable<ProductBase> GetProduct()
+        public async Task<IActionResult> GetProduct()
         {
            
-            List<ProductWithForeignKey> products = appDBContext.Products.ToList();
-            var productBaseList = products.Cast<ProductBase>().ToList();
+            List<ProductWithForeignKey> products = await appDBContext.Products.ToListAsync();
+            //var productBaseList = products.Cast<ProductBase>().ToList();
+
+            // Convert each product to a dictionary with base64-encoded image
+            var productsWithBase64Images = products.Select(p => ConvertProductToDictionary(p)).ToList();
 
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return productBaseList;
+
+            // Return the products as JSON
+            return Ok(productsWithBase64Images);
+
         }
 
 
-        [HttpPost(Name = "PostProduct")]
-        public IActionResult PostProduct(ProductBase product)
+        // Helper method to convert a product to a dictionary with base64-encoded image
+        private Dictionary<string, object> ConvertProductToDictionary(ProductBase product)
         {
+            var dictionary = new Dictionary<string, object>();
+
+            // Use reflection to get all properties of the Product class
+            var properties = typeof(ProductBase).GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(product);
+
+                // Convert the productImg byte array to a base64-encoded string
+                if (property.Name == nameof(ProductBase.productImg) && value is byte[] byteArray)
+                {
+                    dictionary[property.Name] = byteArray != null ? Convert.ToBase64String(byteArray) : null;
+                }
+                else
+                {
+                    // Add other properties as-is
+                    dictionary[property.Name] = value;
+                }
+            }
+
+            return dictionary;
+        }
 
 
 
-            var productWithForeignKey = _mapper.Map<ProductWithForeignKey>(product);
+        /// <summary>
+        /// Creates a new product.
+        /// </summary>
+        /// <param name="product">JSON-serialized ProductBase object.</param>
+        /// <param name="productImg">Product image file.</param>
+        /// <returns>The created product.</returns>
+        [HttpPost(Name = "PostProduct")]
+        [Consumes("multipart/form-data")]
+        public IActionResult PostProduct([FromForm] string product, [FromForm] IFormFile productImg)
+        {
+            // Deserialize the ProductBase object from JSON
+            var productObj = JsonConvert.DeserializeObject<ProductBase>(product);
+            // Convert the image file (IFormFile) to a byte array
+            if (productImg != null && productImg.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    productImg.CopyTo(memoryStream);
+                    productObj.productImg = memoryStream.ToArray(); // Store image as byte array
+                }
+            }
+
+            var productWithForeignKey = _mapper.Map<ProductWithForeignKey>(productObj);
 
             appDBContext.Products.Add(productWithForeignKey);// Cast was successful
             appDBContext.SaveChanges();
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             return Ok();
         }
+
 
 
         [HttpDelete(Name = "DeleteProduct")]
