@@ -8,5 +8,7 @@ namespace StrikkebutikkBackend.Model
         public string comment {  get; set; }
         public string email { get; set; }
         public int productId { get; set; }
+
+        public bool read { get; set; }
     }
 }
