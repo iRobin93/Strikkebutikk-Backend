@@ -67,30 +67,12 @@ namespace StrikkebutikkBackend.Controllers
         }
 
 
-
-        /// <summary>
-        /// Creates a new product.
-        /// </summary>
-        /// <param name="product">JSON-serialized ProductBase object.</param>
-        /// <param name="productImg">Product image file.</param>
-        /// <returns>The created product.</returns>
         [HttpPost(Name = "PostProduct")]
-        [Consumes("multipart/form-data")]
-        public IActionResult PostProduct([FromForm] string product, [FromForm] IFormFile productImg)
+        public IActionResult PostProduct(ProductBase product)
         {
-            // Deserialize the ProductBase object from JSON
-            var productObj = JsonConvert.DeserializeObject<ProductBase>(product);
-            // Convert the image file (IFormFile) to a byte array
-            if (productImg != null && productImg.Length > 0)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    productImg.CopyTo(memoryStream);
-                    productObj.productImg = memoryStream.ToArray(); // Store image as byte array
-                }
-            }
+            
 
-            var productWithForeignKey = _mapper.Map<ProductWithForeignKey>(productObj);
+            var productWithForeignKey = _mapper.Map<ProductWithForeignKey>(product);
 
             appDBContext.Products.Add(productWithForeignKey);// Cast was successful
             appDBContext.SaveChanges();
