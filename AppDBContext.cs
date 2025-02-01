@@ -15,6 +15,8 @@
         public DbSet<Assortment> Assortments { get; set; }
         public DbSet<Pattern> Patterns { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,6 +28,8 @@
             modelBuilder.Entity<Pattern>()
                 .Property(e => e.id)
                 .ValueGeneratedNever(); // This removes the identity behavior
+
+
 
             // Configure the foreign key relationship for ProductWithForeignKey and Pattern
             modelBuilder.Entity<ProductWithForeignKey>()
